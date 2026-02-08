@@ -16,9 +16,10 @@ exports.createProduct = async (req, res) => {
       });
     }
 
-    const imagePath = req.file
-      ? req.file.path.replace(/\\/g, "/")
-      : "";
+    // Di createProduct (Backend)
+const imagePath = req.file 
+  ? `uploads/${req.file.filename}` // Kita paksa formatnya cuma uploads/namafile
+  : "";
 
     const product = await Product.create({
       name,
@@ -102,7 +103,7 @@ exports.updateProduct = async (req, res) => {
     }
 
     // jika upload gambar baru, hapus gambar lama
-    let imagePath = product.image;
+    let imagePath = `uploads/${req.file.filename}`;
     if (req.file) {
       if (product.image) {
         const oldPath = path.join(__dirname, "..", product.image);
