@@ -49,3 +49,6 @@ app.post("/test-order", (req, res) => {
   });
 });
  
+app.use((req, res) => {
+  res.status(404).json({ message: "Endpoint tidak ditemukan!" });
+});

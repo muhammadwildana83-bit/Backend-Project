@@ -3,6 +3,7 @@ const express = require("express");
 const bcrypt = require("bcryptjs"); // Untuk enkripsi password
 const jwt = require("jsonwebtoken"); // Untuk membuat token JWT
 const User = require("../models/User"); // Model User
+const authController = require('../controllers/authController');
 
 // Membuat router baru
 const router = express.Router();

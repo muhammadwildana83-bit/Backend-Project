@@ -1,3 +1,21 @@
-node_modules/
+# 1. Rahasia Dapur (WAJIB)
 .env
-uploads/
+
+# 2. Dependencies
+node_modules/
+
+# 3. Penyimpanan Gambar/File (Biar repo nggak berat)
+# Kita abaikan semua isi folder uploads, tapi sisakan foldernya
+uploads/*
+!uploads/.gitkeep
+
+# 4. Logs & Debugging
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs/
+*.log
+
+# 5. OS Metadata
+.DS_Store
+Thumbs.db
