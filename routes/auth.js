@@ -45,11 +45,12 @@ router.post("/login", async (req, res) => {
   if (!isMatch) return res.status(400).json({ message: "Wrong password" });
 
   // Buat token JWT untuk autentikasi
-  const token = jwt.sign(
-    { id: user._id },
-    process.env.JWT_SECRET,
-    { expiresIn: "1d" }
-  );
+ // Di routes/auth.js
+const token = jwt.sign(
+  { id: user._id },
+  process.env.JWT_SECRET || "kunci_rahasia_darurat_123", // Pakai || sebagai cadangan
+  { expiresIn: "1d" }
+);
 
   res.json({ token });
 });
