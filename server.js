@@ -1,6 +1,7 @@
 const dotenv = require("dotenv");
 const express = require("express");
 const cors = require("cors");
+const fs = require('fs');
 const path = require("path");
 
 const connectDB = require("./config/db");
@@ -8,6 +9,10 @@ const connectDB = require("./config/db");
 dotenv.config();
 
 const app = express();
+const dir = './uploads';
+if (!fs.existsSync(dir)){
+    fs.mkdirSync(dir);
+    console.log("✅ Folder uploads berhasil dibuat otomatis!");}
 
 // ================== MIDDLEWARE ==================
 app.use(cors());
