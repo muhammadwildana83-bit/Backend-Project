@@ -15,17 +15,16 @@ if (!fs.existsSync(dir)){
     console.log("✅ Folder uploads berhasil dibuat otomatis!");}
 
 // ================== MIDDLEWARE ==================
-// Hapus yang lama, ganti jadi ini:
-app.use(cors()); // Ini akan mengizinkan SEMUA secara default
-
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-  
-  // Tangani Preflight (OPTIONS) secara manual biar nggak kena blokir
+  // Izinkan Origin Vercel kamu secara spesifik
+  res.setHeader("Access-Control-Allow-Origin", "https://my-react-project-ruddy-one.vercel.app");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With, Accept");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+
+  // Langsung balas 200 untuk request OPTIONS (Preflight)
   if (req.method === "OPTIONS") {
-    return res.status(200).end();
+    return res.status(200).json({});
   }
   next();
 });
