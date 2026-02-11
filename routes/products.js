@@ -27,7 +27,14 @@ const {
    CREATE PRODUCT
    POST /api/products
 ========================= */
-router.post("/", upload.single("image"), createProduct);
+router.post(
+  "/", 
+  upload.fields([
+    { name: "image", maxCount: 1 },    // Untuk foto utama
+    { name: "gallery", maxCount: 10 } // Untuk gallery, maksimal 10 foto
+  ]), 
+  createProduct
+);
 
 /* =========================
    GET ALL PRODUCTS
