@@ -15,8 +15,14 @@ if (!fs.existsSync(dir)){
     console.log("✅ Folder uploads berhasil dibuat otomatis!");}
 
 // ================== MIDDLEWARE ==================
-app.use(cors());
+app.use(cors({
+  origin: "*", // Mengizinkan semua domain (Vercel, Localhost, dll)
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+app.options("*", cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // ================== DATABASE ==================
 connectDB();
