@@ -15,21 +15,24 @@ if (!fs.existsSync(dir)){
     console.log("✅ Folder uploads berhasil dibuat otomatis!");}
 
 // ================== MIDDLEWARE ==================
-app.use(cors({
-  origin: "*", // Mengizinkan semua domain (Vercel, Localhost, dll)
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
-}));
+// Hapus yang lama, ganti jadi ini:
+app.use(cors()); // Ini akan mengizinkan SEMUA secara default
+
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  
+  // Tangani Preflight (OPTIONS) secara manual biar nggak kena blokir
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+  next();
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ================== DATABASE ==================
-connectDB();
-
-// ================== STATIC FILES ==================
-// supaya gambar bisa diakses dari browser
-// http://localhost:5000/uploads/namafile.jpg
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // ================== ROUTES ==================
 const authRoutes = require("./routes/auth");
