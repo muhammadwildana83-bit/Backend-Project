@@ -29,25 +29,29 @@ if (!fs.existsSync(dir)){
     console.log("✅ Folder uploads berhasil dibuat!");
 }
 
-// ================== MIDDLEWARE (CORS FIX) ==================
+// ================== MIDDLEWARE (CORS FIX FINAL) ==================
 const allowedOrigins = [
   "http://localhost:5173", 
+  "http://localhost:3000",
   "https://my-react-project-ruddy-one.vercel.app"
 ];
 
 app.use(cors({
   origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
+    // 1. Izinkan jika origin ada di daftar
+    // 2. Izinkan jika TIDAK ADA origin (seperti aplikasi mobile atau Postman)
+    // 3. Izinkan domain Vercel manapun (untuk preview branch)
+    if (!origin || allowedOrigins.includes(origin) || origin.endsWith(".vercel.app")) {
       callback(null, true);
     } else {
+      console.log("❌ Origin Ditolak:", origin); // Ini biar kamu tahu domain mana yang bikin error
       callback(new Error("Ditolak CORS!"));
     }
   },
-  credentials: true
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 // ================== ROUTES ==================
 const authRoutes = require("./routes/auth");
