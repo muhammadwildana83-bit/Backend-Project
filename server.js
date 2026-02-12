@@ -29,6 +29,12 @@ if (!fs.existsSync(dir)){
     console.log("✅ Folder uploads berhasil dibuat!");
 }
 
+const uploadDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir);
+    console.log("✅ Folder uploads berhasil dibuat!");
+}
+
 // ================== MIDDLEWARE (CORS FIX FINAL) ==================
 const allowedOrigins = [
   "http://localhost:5173", 
