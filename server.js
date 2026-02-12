@@ -23,12 +23,6 @@ const connectDB = async () => {
 connectDB();
 
 // Buat folder uploads
-const dir = './uploads';
-if (!fs.existsSync(dir)){
-    fs.mkdirSync(dir);
-    console.log("✅ Folder uploads berhasil dibuat!");
-}
-
 const uploadDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir);
