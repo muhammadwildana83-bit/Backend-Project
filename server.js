@@ -29,6 +29,8 @@ if (!fs.existsSync(uploadDir)) {
     console.log("✅ Folder uploads berhasil dibuat!");
 }
 
+app.use("/uploads", express.static(uploadDir));
+
 // ================== MIDDLEWARE (CORS FIX FINAL) ==================
 const allowedOrigins = [
   "http://localhost:5173", 
