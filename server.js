@@ -59,7 +59,7 @@ const productRoutes = require("./routes/products");
 const orderRoutes = require("./routes/orders");
 
 app.use("/api/auth", authRoutes);
-app.use("/api/products", productRoutes);
+app.use('/api/products', productRoutes);
 app.use("/api/orders", orderRoutes);
 
 // ================== TEST & OTHERS ==================
@@ -79,4 +79,17 @@ app.use((req, res) => {
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`🚀 Server running on port ${PORT}`);
+});
+
+// Middleware untuk menangkap error Multer agar log-nya lebih jelas
+app.use((error, req, res, next) => {
+  if (error instanceof multer.MulterError) {
+    if (error.code === 'LIMIT_UNEXPECTED_FILE') {
+      return res.status(400).json({
+        success: false,
+        message: `Field tidak dikenal: ${error.field}. Pastikan nama field sesuai (image/gallery).`
+      });
+    }
+  }
+  next(error);
 });
