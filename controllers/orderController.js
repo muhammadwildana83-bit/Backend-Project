@@ -6,51 +6,42 @@ const Product = require("../models/Product");
 // ===============================
 exports.createOrder = async (req, res) => {
   try {
-    const { items } = req.body;
+    const { items } = req.body; // Kita hanya ambil items, totalPrice dihitung ulang di sini (lebih aman)
 
-    // validasi basic
     if (!items || items.length === 0) {
-      return res.status(400).json({
-        success: false,
-        message: "Order items is empty",
-      });
+      return res.status(400).json({ success: false, message: "Keranjang kosong" });
     }
 
     let orderItems = [];
-    let totalPrice = 0;
+    let calculatedTotal = 0;
 
     for (const item of items) {
-      // validasi quantity
-      if (!item.quantity || item.quantity <= 0) {
-        return res.status(400).json({
-          success: false,
-          message: "Invalid item quantity",
-        });
+      console.log("Item yang diterima:", item);
+      // 1. Cek apakah productId ada di payload
+      if (!item.productId) {
+        return res.status(400).json({ success: false, message: "ID Produk tidak ditemukan di payload" });
       }
 
+      // 2. Cari produk di database
       const product = await Product.findById(item.productId);
-
       if (!product) {
-        return res.status(404).json({
-          success: false,
-          message: "Product not found",
-        });
+        return res.status(404).json({ success: false, message: `Produk dengan ID ${item.productId} tidak ditemukan` });
       }
 
-      const itemTotal = product.price * item.quantity;
-
+      // 3. Masukkan ke array sesuai Schema Model (menggunakan field 'product')
       orderItems.push({
-        product: product._id,
-        quantity: item.quantity,
-        price: product.price, // snapshot harga
+        product: product._id, // Merujuk ke field 'product' di Model Order
+        quantity: Number(item.quantity),
+        price: product.price, 
       });
 
-      totalPrice += itemTotal;
+      calculatedTotal += product.price * Number(item.quantity);
     }
 
+    // 4. Simpan ke database
     const order = await Order.create({
       items: orderItems,
-      totalPrice,
+      totalPrice: calculatedTotal,
       status: "pending",
     });
 
@@ -59,12 +50,16 @@ exports.createOrder = async (req, res) => {
       message: "Order created successfully",
       data: order,
     });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
+
+  // Di Backend (Order Controller)
+} catch (error) {
+  console.log("FULL ERROR DB:", error); // Lihat ini di LOG RAILWAY
+  res.status(500).json({
+    success: false,
+    message: error.message,
+    stack: error.stack // Tambahkan ini buat debug sementara
+  });
+}
 };
 
 // ===============================

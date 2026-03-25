@@ -29,7 +29,7 @@ if (!fs.existsSync(uploadDir)) {
     console.log("✅ Folder uploads berhasil dibuat!");
 }
 
-app.use("/uploads", express.static(uploadDir));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // ================== MIDDLEWARE (CORS FIX FINAL) ==================
 const allowedOrigins = [
@@ -55,6 +55,7 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
+app.use(express.json());
 // ================== ROUTES ==================
 const authRoutes = require("./routes/auth");
 const productRoutes = require("./routes/products");
