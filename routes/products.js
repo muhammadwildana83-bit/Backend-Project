@@ -38,7 +38,7 @@ router.post(
 
 /* =========================
    GET ALL PRODUCTS
-   GET /api/products
+   GET /api/products-
 ========================= */
 router.get("/", getProducts);
 

@@ -60,10 +60,12 @@ app.use(express.json());
 const authRoutes = require("./routes/auth");
 const productRoutes = require("./routes/products");
 const orderRoutes = require("./routes/orders");
+const blogRoutes = require("./routes/blogs");
 
 app.use("/api/auth", authRoutes);
 app.use('/api/products', productRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/blogs", blogRoutes);
 
 // ================== TEST & OTHERS ==================
 app.get("/", (req, res) => {
